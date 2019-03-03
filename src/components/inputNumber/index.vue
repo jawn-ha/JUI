@@ -9,11 +9,11 @@
       @change="handleChange"
       @focus="event => $emit('focus', event)"
       @blur="event => $emit('blur', event)"
-      >
+    >
       <template slot="prepend">
         <div
-          :class="['prepend-part',{
-          'is-disabled': addDisabled
+          :class="['prepend-part', {
+            'is-disabled': addDisabled
           }]"
           @mousedown.stop="!addDisabled && handleClick('add')"
         >
@@ -24,10 +24,10 @@
       <template slot="append">
         <div
           :class="['append-part', {
-            'is-disabled': decDisabled
+              'is-disabled': decDisabled
           }]"
           @mousedown.stop="!decDisabled && handleClick('dec')"
-          >
+        >
           <j-icon name="remove" size="16"/>
         </div>
       </template>
@@ -37,51 +37,70 @@
 
 <script>
   const isNum = num =>
-    !isNaN(num*1) && Object.prototype.toString.call(num * 1)  === "[Object Number]";
+    !isNaN(num * 1) &&
+    Object.prototype.toString.call(num * 1) === "[object Number]";
 
   export default {
     name: "input-number",
     props: {
-      value:{type:[Number], default:0},
-      step:{type:Number, defaule:1},
-      max:{type:Number, default: Infinity},
-      min:{type:Number, default: -Infinity},
-      disabled:{type:Boolean, default:false}
-   },
-    model: {
-      prop:"value",
-      event:"input"
-    },
-    data(){
-      return {
-        inputValue: 0
+      value: {
+        type: [Number],
+        default: 0
+      },
+      step: {
+        type: Number,
+        default: 1
+      },
+      max: {
+        type: Number,
+        default: Infinity
+      },
+      min: {
+        type: Number,
+        default: -Infinity
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
-    computed:{
+    model: {
+      prop: "value",
+      event: "input"
+    },
+    data() {
+      return {
+        inputValue: 0
+      };
+    },
+    computed: {
       addDisabled() {
-        return this.disabled || (isNum(this.max) && this.inputValue >= this.max );
+        return this.disabled || (isNum(this.max) && this.inputValue >= this.max);
       },
       decDisabled() {
-        return this.disabled || (isNum(this.min) && this.inputValue <= this.min );
+        return this.disabled || (isNum(this.min) && this.inputValue <= this.min);
       },
       inputNumberValue: {
-        get(){
-          return this.inputValue
+        get() {
+          return this.inputValue;
         },
         set(value) {
-          const {min, max, inputValue} = this;
+          const { min, max, inputValue } = this;
           const limits = [
             {
               need: value => !isNum(value),
               value: inputValue
-            },{
+            },
+            {
               need: value => value >= max,
               value: max
-            },{
+            },
+            {
               need: value => value <= min,
               value: min
-            },{
-              need: ()=>true,
+            },
+            {
+              need: () => true,
               value: value * 1
             }
           ];
