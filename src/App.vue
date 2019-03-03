@@ -39,7 +39,7 @@
 <script>
 const context = require.context("@/components/", true, /demo\.vue$/);
 const routers = {
-  common: ["button", "icon",  "input", "inputnumber"]
+  common: ["button", "icon",  "input", "inputnumber", "checkboxgroup"]
 };
 context.keys().forEach(url => {
   const start = url.indexOf("/");

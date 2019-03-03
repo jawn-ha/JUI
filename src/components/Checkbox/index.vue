@@ -8,9 +8,9 @@
     @click.stop="handleClick"
   >
     <span class="checkout-item__input">
-      <fat-icon name="check"/>
+      <j-icon name="check"/>
     </span>
-    
+
     <input v-if="false" type="checkbox" v-bind="$attrs" :value="model" @click.stop>
     <slot></slot>
   </label>
@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     isGroup() {
-      return this.$parent.$options._componentTag === "fat-checkbox-group";
+      return this.$parent.$options._componentTag === "j-checkbox-group";
     },
     isDisabled() {
       return this.$parent.disabled || this.disabled;
