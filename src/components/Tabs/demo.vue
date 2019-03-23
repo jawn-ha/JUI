@@ -1,0 +1,158 @@
+<template>
+  <Demo-block title="Tabs 标签页" subtitle="分隔内容上有关联但属于不同类别的数据集合。" :README="README">
+    <Demo-row title="基础用法" description="当用户操作时，左右滑动，快速改变数值" :code="example1">
+      <j-tabs @change="handleChange">
+        <j-tab label="Tab 1" id="tab1">Content of Tab Pane 1</j-tab>
+        <j-tab label="Tab 2" id="tab2">Content of Tab Pane 2</j-tab>
+        <j-tab label="Tab 3" id="tab3">Content of Tab Pane 3</j-tab>
+        <j-tab label="Tab 4" id="tab4">Content of Tab Pane 4</j-tab>
+      </j-tabs>
+    </Demo-row>
+
+    <Demo-row title="卡片样式" description="卡片化的标签页，在卡片模式下可设定标签页的关闭按钮" :code="example2">
+      <j-tabs card>
+        <j-tab label="Tab 1" id="tab1">Content of Tab Pane 1</j-tab>
+        <j-tab label="Tab 2" id="tab2" closable>Content of Tab Pane 2</j-tab>
+        <j-tab label="Tab 3" id="tab3">Content of Tab Pane 3</j-tab>
+        <j-tab label="Tab 4" id="tab4">Content of Tab Pane 4</j-tab>
+      </j-tabs>
+    </Demo-row>
+
+    <Demo-row title="自定义初始位置以及切换" description="通过v-model指令控制tab活跃的标签页" :code="example3">
+      <j-tabs v-model="tab">
+        <j-tab label="Tab 1" id="tab1" cacheable>Content of Tab Pane 1</j-tab>
+        <j-tab label="Tab 2" id="tab2">Content of Tab Pane 2</j-tab>
+        <j-tab label="Tab 3" id="tab3">Content of Tab Pane 3</j-tab>
+        <j-tab label="Tab 4" id="tab4">Content of Tab Pane 4</j-tab>
+      </j-tabs>
+    </Demo-row>
+
+    <Demo-row title="禁用" description="禁用指定tab页" :code="example4">
+      <j-tabs v-model="otherTabActive">
+        <j-tab label="Tab 1" id="tab1">Content of Tab Pane 1</j-tab>
+        <j-tab label="Tab 2" id="tab2" disabled>Content of Tab Pane 2</j-tab>
+        <j-tab label="Tab 3" id="tab3">Content of Tab Pane 3</j-tab>
+        <j-tab label="Tab 4" id="tab4">Content of Tab Pane 4</j-tab>
+      </j-tabs>
+    </Demo-row>
+
+    <Demo-row title="动态修改Tab" description="实现动态修改Tabs数量，默认选中第一个Tab页">
+      <j-button size="mini" @click.stop="handleClick('add')">添加</j-button>
+      <j-button size="mini" @click.stop="handleClick('dec')">减少</j-button>
+
+      <div class="row-item">
+        <j-tabs v-model="anotherTabActive">
+          <j-tab
+            v-for="(item, index) in tabs"
+            :label="`${item.label}+${index}`"
+            :id="`${item.label}+${index}`"
+            :key="index"
+          >
+            {{
+            item.content + index
+            }}
+          </j-tab>
+        </j-tabs>
+      </div>
+    </Demo-row>
+  </Demo-block>
+</template>
+
+<script>
+import DemoCommon from "../common/demo-common";
+import README from "./README.md";
+
+export default {
+  mixins: [DemoCommon],
+  data() {
+    return {
+      range: 10,
+      tab: "tab1",
+      tabActive: "tab3",
+      otherTabActive: "tab1",
+      anotherTabActive: "tab1",
+
+      tabs: [
+        {
+          label: "tab",
+          content: "tabContent"
+        }
+      ],
+
+      UI: {
+        tab: true
+      },
+
+      README
+    };
+  },
+  computed: {
+    example1() {
+      return `<j-tabs @change="handleChange">
+    <j-tab label="Tab 1" id="tab1">Content of Tab Pane 1</j-tab>
+    <j-tab label="Tab 2" id="tab2">Content of Tab Pane 2</j-tab>
+    <j-tab label="Tab 3" id="tab3">Content of Tab Pane 3</j-tab>
+    <j-tab label="Tab 4" id="tab4">Content of Tab Pane 4</j-tab>
+</j-tabs>`;
+    },
+    example2() {
+      return `<j-tabs card>
+    <j-tab label="Tab 1" id="tab1">Content of Tab Pane 1</j-tab>
+    <j-tab label="Tab 2" id="tab2" closable>Content of Tab Pane 2</j-tab>
+    <j-tab label="Tab 3" id="tab3">Content of Tab Pane 3</j-tab>
+    <j-tab label="Tab 4" id="tab4">Content of Tab Pane 4</j-tab>
+</j-tabs>`;
+    },
+    example3() {
+      return `<j-tabs v-model="tab">
+    <j-tab label="Tab 1" id="tab1" cacheable>Content of Tab Pane 1</j-tab>
+    <j-tab label="Tab 2" id="tab2">Content of Tab Pane 2</j-tab>
+    <j-tab label="Tab 3" id="tab3">Content of Tab Pane 3</j-tab>
+    <j-tab label="Tab 4" id="tab4">Content of Tab Pane 4</j-tab>
+</j-tabs>`;
+    },
+    example4() {
+      return `<j-tabs v-model="otherTabActive">
+    <j-tab label="Tab 1" id="tab1">Content of Tab Pane 1</j-tab>
+    <j-tab label="Tab 2" id="tab2" disabled>Content of Tab Pane 2</j-tab>
+    <j-tab label="Tab 3" id="tab3">Content of Tab Pane 3</j-tab>
+    <j-tab label="Tab 4" id="tab4">Content of Tab Pane 4</j-tab>
+</j-tabs>`;
+    }
+  },
+  methods: {
+    handleClick(type) {
+      const handler = {
+        add: () => this.tabs.push({ label: "tab", content: "tabContent" }),
+        dec: () => {
+          if (this.tabs.length) {
+            this.tabs = this.tabs.slice(0, this.tabs.length - 1);
+          }
+        }
+      };
+      handler[type]();
+    },
+    handleChange() {
+      this.$message({
+        content: "tab已经改变"
+      });
+    }
+  }
+};
+</script>
+<style lang="scss">
+.demo-row {
+  .tabs-content {
+    max-width: 640px;
+    height: 100px;
+    border: 1px solid #e4e7ed;
+    border-top: none;
+  }
+  &:nth-of-type(2) {
+    .tabs-content {
+      height: 100px;
+      border: none;
+    }
+  }
+}
+</style>
